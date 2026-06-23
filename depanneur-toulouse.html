@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoSOS Toulouse — Dépannage auto 24h/24</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #C0392B;
+    --red-dark: #962d22;
+    --red-light: #fdf0ef;
+    --dark: #1a1a2e;
+    --dark2: #16213e;
+    --gray: #f5f5f0;
+    --gray2: #e8e8e0;
+    --text: #1a1a1a;
+    --muted: #666;
+    --white: #ffffff;
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── BANDE D'URGENCE ─────────────────────────────────── */
+  .urgence-band {
+    background: var(--red);
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .urgence-band a {
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+  }
+
+  /* ── NAV ─────────────────────────────────────────────── */
+  nav {
+    background: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    color: white;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--red); }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: white; }
+  .nav-cta {
+    background: var(--red);
+    color: white !important;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600 !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--red-dark) !important; color: white !important; }
+
+  /* ── HERO ────────────────────────────────────────────── */
+  .hero {
+    background: var(--dark2);
+    padding: 80px 40px 70px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(192,57,43,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    background: rgba(192,57,43,0.2);
+    color: #f5a89e;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 900;
+    color: white;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+  }
+  .hero h1 span { color: var(--red); }
+  .hero-sub {
+    color: rgba(255,255,255,0.6);
+    font-size: 18px;
+    max-width: 520px;
+    margin: 0 auto 48px;
+  }
+
+  /* Bouton SOS pulsant */
+  .sos-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--red);
+    color: white;
+    text-decoration: none;
+    padding: 20px 40px;
+    border-radius: 60px;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    position: relative;
+    transition: transform 0.15s, background 0.15s;
+  }
+  .sos-btn:hover { background: var(--red-dark); transform: scale(1.03); }
+  .sos-btn::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 64px;
+    border: 2px solid var(--red);
+    animation: pulse-ring 2s ease-out infinite;
+    opacity: 0;
+  }
+  @keyframes pulse-ring {
+    0%   { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 0;   transform: scale(1.15); }
+  }
+  .sos-icon {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .hero-badges {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .hero-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+  }
+  .hero-badge svg { color: #5cb85c; }
+
+  /* ── SERVICES ────────────────────────────────────────── */
+  section { padding: 80px 40px; }
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .section-intro {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 560px;
+    margin-bottom: 48px;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .service-card {
+    background: var(--gray);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1.5px solid transparent;
+  }
+  .service-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--red);
+    box-shadow: 0 8px 32px rgba(192,57,43,0.12);
+  }
+  .service-icon {
+    width: 48px; height: 48px;
+    background: var(--red-light);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+    font-size: 24px;
+  }
+  .service-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .service-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── POURQUOI NOUS ───────────────────────────────────── */
+  .why-section {
+    background: var(--dark);
+    color: white;
+  }
+  .why-section .section-label { color: #f5a89e; }
+  .why-section h2 { color: white; }
+  .why-section .section-intro { color: rgba(255,255,255,0.5); }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .why-item {
+    padding: 32px 28px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .why-number {
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--red);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .why-item h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 6px;
+  }
+  .why-item p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ── ZONE D'INTERVENTION ─────────────────────────────── */
+  .zone-section { background: var(--red-light); }
+  .zone-section h2 { color: var(--dark); }
+  .zone-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 900px;
+  }
+  .zone-tag {
+    background: white;
+    border: 1.5px solid var(--gray2);
+    border-radius: 30px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--dark);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .zone-tag:hover { border-color: var(--red); color: var(--red); }
+  .zone-tag.capital {
+    background: var(--dark);
+    color: white;
+    border-color: var(--dark);
+    font-weight: 700;
+  }
+
+  /* ── CONTACT ─────────────────────────────────────────── */
+  .contact-section {
+    background: var(--gray);
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  .contact-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    border: 1.5px solid var(--gray2);
+  }
+  .contact-card.urgent {
+    background: var(--dark2);
+    border-color: transparent;
+    color: white;
+  }
+  .contact-card.urgent h3 { color: white; }
+  .contact-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .contact-item:last-of-type { border-bottom: none; }
+  .contact-item-icon {
+    width: 36px; height: 36px;
+    background: rgba(192,57,43,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .contact-item-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 2px;
+  }
+  .contact-item-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+  }
+  .contact-item-value a {
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+  }
+  .contact-item-value a:hover { border-bottom-color: white; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--gray2);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: white;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--red);
+  }
+  .form-group textarea { height: 100px; resize: vertical; }
+  .submit-btn {
+    width: 100%;
+    background: var(--dark);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s;
+  }
+  .submit-btn:hover { background: var(--red); }
+
+  /* ── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 32px 40px;
+    font-size: 13px;
+  }
+  footer strong { color: rgba(255,255,255,0.8); }
+
+  /* ── BOUTON FLOTTANT ─────────────────────────────────── */
+  .float-sos {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--red);
+    color: white;
+    text-decoration: none;
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 20px rgba(192,57,43,0.5);
+    z-index: 999;
+    animation: pulse-ring 2s ease-out infinite;
+    transition: transform 0.15s;
+  }
+  .float-sos:hover { transform: scale(1.1); }
+
+  /* ── RESPONSIVE ──────────────────────────────────────── */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    section { padding: 60px 20px; }
+    .hero { padding: 60px 20px; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .sos-btn { font-size: 22px; padding: 16px 30px; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Bande urgence -->
+<div class="urgence-band">
+  🚨 Panne ou accident ? Appelez maintenant — <a href="tel:0612345678">06 12 34 56 78</a> — disponible 24h/24, 7j/7
+</div>
+
+<!-- Navigation -->
+<nav>
+  <div class="logo">Auto<span>SOS</span> Toulouse</div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#pourquoi">Pourquoi nous</a></li>
+    <li><a href="#zone">Zone</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="tel:0612345678" class="nav-cta">📞 Urgence</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-eyebrow">Dépanneur agréé · Toulouse & agglo</div>
+  <h1>Votre voiture<br>en panne ?<br><span>On arrive vite.</span></h1>
+  <p class="hero-sub">Intervention rapide partout à Toulouse et dans un rayon de 50 km. Remorquage, démarrage, crevaison, blocage.</p>
+
+  <a href="tel:0612345678" class="sos-btn">
+    <span class="sos-icon">📞</span>
+    06 12 34 56 78
+  </a>
+
+  <div class="hero-badges">
+    <div class="hero-badge">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5cb85c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Disponible 24h/24
+    </div>
+    <div class="hero-badge">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5cb85c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Arrivée sous 30 min
+    </div>
+    <div class="hero-badge">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5cb85c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Devis immédiat
+    </div>
+    <div class="hero-badge">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#5cb85c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Toutes marques
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services" style="text-align:center;">
+  <div class="section-label">Nos prestations</div>
+  <h2>Ce qu'on fait pour vous</h2>
+  <p class="section-intro" style="margin: 0 auto 48px;">Du simple coup de pouce au remorquage complet, on gère toutes les situations sur route.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🏗️</div>
+      <h3>Remorquage</h3>
+      <p>Véhicule récupéré et acheminé vers le garage de votre choix, quelle que soit la distance.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔋</div>
+      <h3>Démarrage batterie</h3>
+      <p>Batterie déchargée ou défaillante ? On vous remet en route en quelques minutes.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔧</div>
+      <h3>Crevaison</h3>
+      <p>Pose de roue de secours ou réparation sur place. On ne vous laisse pas au bord de la route.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⛽</div>
+      <h3>Panne de carburant</h3>
+      <p>On vous apporte le carburant nécessaire pour rejoindre la prochaine station.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔑</div>
+      <h3>Ouverture de véhicule</h3>
+      <p>Clé enfermée à l'intérieur ? Ouverture sans casse ni dégradation de votre véhicule.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💥</div>
+      <h3>Post-accident</h3>
+      <p>Prise en charge rapide après un accident. Coordination avec votre assurance si besoin.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Pourquoi nous -->
+<section id="pourquoi" class="why-section">
+  <div class="section-label">Pourquoi nous choisir</div>
+  <h2>Des chiffres qui parlent</h2>
+  <p class="section-intro">Plus de 10 ans sur les routes toulousaines. Une réputation construite intervention après intervention.</p>
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="why-number">24/7</div>
+      <h3>Disponibilité</h3>
+      <p>Nuits, week-ends, jours fériés — on décroche toujours.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-number">&lt;30'</div>
+      <h3>Délai moyen</h3>
+      <p>Arrivée sur place en moins de 30 minutes en zone urbaine.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-number">+5 000</div>
+      <h3>Interventions</h3>
+      <p>Véhicules dépannés depuis notre création en 2014.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-number">4.8★</div>
+      <h3>Avis clients</h3>
+      <p>Note moyenne sur Google. La confiance, ça se mérite.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Zone d'intervention -->
+<section id="zone" class="zone-section">
+  <div class="section-label">Zone couverte</div>
+  <h2>Où on intervient</h2>
+  <p class="section-intro">Toulouse et toute son agglomération, autoroutes et routes départementales comprises.</p>
+  <div class="zone-tags">
+    <span class="zone-tag capital">📍 Toulouse</span>
+    <span class="zone-tag">Blagnac</span>
+    <span class="zone-tag">Colomiers</span>
+    <span class="zone-tag">Tournefeuille</span>
+    <span class="zone-tag">Muret</span>
+    <span class="zone-tag">Cugnaux</span>
+    <span class="zone-tag">Plaisance-du-Touch</span>
+    <span class="zone-tag">L'Union</span>
+    <span class="zone-tag">Balma</span>
+    <span class="zone-tag">Ramonville</span>
+    <span class="zone-tag">Castanet-Tolosan</span>
+    <span class="zone-tag">Portet-sur-Garonne</span>
+    <span class="zone-tag">Labège</span>
+    <span class="zone-tag">Roques</span>
+    <span class="zone-tag">Léguevin</span>
+    <span class="zone-tag">Cornebarrieu</span>
+    <span class="zone-tag">A61 · A62 · A64 · A68</span>
+  </div>
+  <p style="margin-top:24px; font-size:14px; color:#666;">Hors zone ? Appelez-nous quand même : on évalue ensemble.</p>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="contact-section">
+  <div class="section-label">Contactez-nous</div>
+  <h2>En urgence ou sur rendez-vous</h2>
+  <div class="contact-grid">
+
+    <!-- Carte coordonnées -->
+    <div class="contact-card urgent">
+      <h3>📞 Nous joindre</h3>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">📱</div>
+        <div>
+          <div class="contact-item-label">Urgences 24h/24</div>
+          <div class="contact-item-value"><a href="tel:0612345678">06 12 34 56 78</a></div>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <div>
+          <div class="contact-item-label">Standard (horaires bureau)</div>
+          <div class="contact-item-value"><a href="tel:0512345678">05 12 34 56 78</a></div>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">✉️</div>
+        <div>
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-value"><a href="mailto:contact@autoSOS-toulouse.fr">contact@autoSOS-toulouse.fr</a></div>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div>
+          <div class="contact-item-label">Adresse</div>
+          <div class="contact-item-value" style="font-size:14px;">12 rue des Mécaniciens<br>31000 Toulouse</div>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <div>
+          <div class="contact-item-label">Dépannage route</div>
+          <div class="contact-item-value" style="font-size:14px;">24h/24 — 7j/7</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire -->
+    <div class="contact-card">
+      <h3>Demande non urgente</h3>
+      <div class="form-group">
+        <label for="nom">Nom &amp; prénom</label>
+        <input type="text" id="nom" placeholder="Jean Dupont">
+      </div>
+      <div class="form-group">
+        <label for="tel">Téléphone</label>
+        <input type="tel" id="tel" placeholder="06 00 00 00 00">
+      </div>
+      <div class="form-group">
+        <label for="type">Type de prestation</label>
+        <select id="type">
+          <option value="">Sélectionner…</option>
+          <option>Remorquage</option>
+          <option>Démarrage batterie</option>
+          <option>Crevaison</option>
+          <option>Panne de carburant</option>
+          <option>Ouverture de véhicule</option>
+          <option>Post-accident</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message">Détails (optionnel)</label>
+        <textarea id="message" placeholder="Lieu de la panne, marque du véhicule…"></textarea>
+      </div>
+      <button class="submit-btn" onclick="alert('Message envoyé ! Nous vous rappelons rapidement.')">Envoyer la demande</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p><strong>AutoSOS Toulouse</strong> · Dépannage automobile 24h/24 · Siret : 123 456 789 00012</p>
+  <p style="margin-top:8px;">© 2025 AutoSOS Toulouse — Tous droits réservés · <a href="#" style="color:rgba(255,255,255,0.4);">Mentions légales</a></p>
+</footer>
+
+<!-- Bouton flottant urgence -->
+<a href="tel:0612345678" class="float-sos" title="Appel d'urgence">📞</a>
+
+</body>
+</html>
